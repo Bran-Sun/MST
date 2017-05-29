@@ -1,3 +1,0 @@
-/Users/sunzhenbo/programming/GradeTwo/individual/IndividualProject/Problem2/mst/src2/build/CMakeFiles/rebuild_cache.dir
-/Users/sunzhenbo/programming/GradeTwo/individual/IndividualProject/Problem2/mst/src2/build/CMakeFiles/edit_cache.dir
-/Users/sunzhenbo/programming/GradeTwo/individual/IndividualProject/Problem2/mst/src2/build/CMakeFiles/main.dir

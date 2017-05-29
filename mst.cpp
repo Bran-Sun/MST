@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <map>
 #include <climits>
+#include "generate.h"
 
 
 void MST::insert(const Point_2 &p1, const Point_2 &p2)
