@@ -45,6 +45,7 @@ public:
   double get_distance() const {
     return distance;
   }
+
 };
 
 #endif

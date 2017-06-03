@@ -2,7 +2,12 @@
 #include <algorithm>
 #include <map>
 #include <climits>
+#include <chrono>
 #include "generate.h"
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
+using namespace std;
 
 
 void MST::insert(const Point_2 &p1, const Point_2 &p2)
@@ -28,6 +33,7 @@ void MST::find_min_route()
   for (auto n : nodes)
     map_tree[n] = n;
   int cnt = 0;
+
   for (auto e : edges)
   {
     Point_2 v = e.segment[0], w = e.segment[1];
@@ -60,95 +66,17 @@ void MST::print_min_route(std::ostream &os)
   os << "distance = " << dis << std::endl;
 }
 
-void MST::find_k_min_route(int k)
+void MST::print_to_verties(GLfloat* vertices, int& min_edge)
 {
-  find_min_route();
-  routes.push_back(K_mst(min_routes));
-
-  for (int i = 0; i < k - 1; i++)
+  min_edge = min_routes.size();
+  for (int i = 0; i < min_edge; i++)
   {
-    for (int j = 0; j <=i; j++)
-    {
-      add_min_route(routes[j]);
-    }
+    Point_2 v = min_routes[i].segment[0], w = min_routes[i].segment[1];
+    vertices[i * 6] = v.x() * 1.8 / Range - 0.9;
+    vertices[i * 6 + 1] = v.y() * 1.8 / Range - 0.9;
+    vertices[i * 6 + 2] = 0.0;
+    vertices[i * 6 + 3] = w.x() * 1.8 / Range - 0.9;
+    vertices[i * 6 + 4] = w.y() * 1.8 / Range - 0.9;
+    vertices[i * 6 + 5] = 0.0;
   }
-}
-
-void MST::add_min_route(const K_mst &route)
-{
-  K_mst new_tree, tem_tree;
-  new_tree.set_weight(100000000.0);
-  for (auto e : route.tree)
-  {
-    for (auto x : edges)
-    {
-      if (!route.if_edge_in_tree(x))
-      {
-        tem_tree = route;
-        tem_tree.add(x);
-        tem_tree.pop(e);
-        if ((!if_become_circle(tem_tree))&&(tem_tree < new_tree) && (tem_tree > route))
-				{
-					if (not_in_routes(tem_tree))
-						new_tree = tem_tree;
-				}
-      }
-    }
-  }
-  routes.push_back(new_tree);
-}
-
-bool MST::not_in_routes(const K_mst &k) const
-{
-		for (auto route : routes)
-		{
-				if (route == k)
-						return false;
-		}
-		return true;
-}
-
-bool MST::if_become_circle(const K_mst &tem_route)
-{
-		std::map<Point_2, Point_2> map_tree;
-		for (auto n : nodes)
-		{
-				map_tree[n] = n;
-		}
-		for (auto e : tem_route.tree)
-		{
-      Point_2 v = e.segment[0], w = e.segment[1];
-      while (!(v == map_tree[v]))
-        v = map_tree[v];
-      while (!(w == map_tree[w]))
-        w = map_tree[w];
-			if (v == w)
-       return true;
-      else map_tree[v] = w;
-		}
-		return false;
-}
-
-void MST::print_k_min_route(int k)
-{
-		sort(routes.begin(),routes.end());
-		routes.erase(unique(routes.begin(),routes.end()),routes.end());
-		int i = 0;
-		for (auto iter = routes.begin(); iter != routes.end(); iter++)
-		{
-				i++;
-				if (i == k)
-				{
-						int cnt=1;
-						std::cout << " the edges of MST are: " << std::endl;
-						for (auto e : iter->tree)
-						{
-							std::cout << "Edge " << cnt << " : " << std::endl;
-							e.print(std::cout);
-							cnt++;
-						}
-						std::cout << "weight: " << iter->weight << std::endl;
-						break;
-				}
-		}
 }
